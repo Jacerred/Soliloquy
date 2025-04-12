@@ -130,8 +130,9 @@ db_output: the output from the vector DB query
 query_text: the prompt for the query
 """
 def query_with_db(db_output, query_text):
+    merged_string = ""
     for i in range(0, len(db_output["documents"][0])):
-        merged_string += dp_output['metadatas'][i]['start_time'] + "\n" +  db_output["documents"][0][i] + "\n\n"
+        merged_string += db_output['metadatas'][i]['start_time'].strftime("%Y-%m-%d %H:%M:%S") + "\n" +  db_output["documents"][0][i] + "\n\n"
 
     response = client.models.generate_content(
         model="gemini-2.5-pro-exp-03-25",
