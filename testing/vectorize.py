@@ -33,7 +33,7 @@ Params:
     query: string
     n_results: int
 
-Returns list of list of strings
+Returns dict of documents and m
 {"documents": [[document1], [document2], ...], "metadatas": [{"start_time": start_time, "end_time": end_time}, {"start_time": start_time, "end_time": end_time}, ...]}
 """
 def query_vector(query: str, n_results: int = 1):

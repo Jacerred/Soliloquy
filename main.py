@@ -83,29 +83,6 @@ async def processVideo(filename: str, prompt: str, start_time: datetime, end_tim
     print(filename, prompt)
     return {"success": 1}
 
-"""
-chunkVideo(str: path_to_video) -> List:
-- Returns list of absolute paths to 90 min video chunks - video_chunk dir
-"""
-def chunkVideo(path_to_video: str, chunk_seconds: int = 10*60) -> List:
-    video_name = os.path.basename(path_to_video)
-    path_to_video = f"{base_dir}\\{path_to_video}"
-
-    try:
-        # create dir for chunks of specific video
-        os.mkdir(f"{chunk_base_dir}\\{video_name}")
-
-        # using ffmpeg, chunk a video into n min chunks
-        cmd = f"{base_dir}\\ffmpeg -i {path_to_video} -threads 3 \
-            -vcodec copy -f segment -segment_time {chunk_seconds} \
-            -reset_timestamps 1 \
-            {chunk_base_dir}\\{video_name}\\{video_name}_cam_out_h264_%02d.mp4"
-
-        os.system(cmd)
-
-        return os.listdir(f"{chunk_base_dir}\\{video_name}")
-    except:
-        return []
 
 """
 uploadMongo(summary: str, timestamp: datetime):
@@ -126,4 +103,3 @@ def uploadMongo(summary: str, start_time: datetime, end_time: datetime):
 @app.get("/")
 async def root():
     return {"message": "OISJDOIFJSDIOFSJ"}
-
