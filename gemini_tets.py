@@ -7,9 +7,9 @@ import os
 from moviepy.video.io.ffmpeg_tools import ffmpeg_extract_subclip
 from moviepy.editor import VideoFileClip
 
-client = genai.Client(api_key="AIzaSyBvEquIsjGuvuwQ5jvoNPpV1NI82-R8gYs")
+client = genai.Client(api_key="AIzaSyBQDwNYgMHZTMrX7w6XlWFatG0TPx2XunQ")
 
-def chop_video(input_file, slice_duration=600):
+def chop_video(input_file, slice_duration):
     clip = VideoFileClip(input_file)
     total_duration = clip.duration
     print(f"Total video duration: {total_duration:.2f} seconds")
@@ -50,19 +50,19 @@ def upload_image(file_path):
         model="gemini-2.0-flash",
         contents=[
             video_file,
-            "First find the length of the video, then Summarize this video in a paragraph, and generate a summary when any event occur. "
-            "Please print in the format: length of video (.. hours .. minutes .. seocnd)\\noverall summary (only the summary, do not include any title)\\ntimestamp (min:sec)\\n"
-            "summary of the event (only the summary, do not include any title)\\nlater summaries. print an empty line between "
-            "length of video and overall summary, overall and event summaries, and between each event summaries. "
-            "Do not print anything  like 'here is the result' or 'here are the summaries'"])
+            "First find the length of the video, then summarize this video in a paragraph. In addition, generate a summary of the scene every 5 second. "
+            "Please print in the format: length of video (.. hours .. minutes .. seocnd)\\noverall summary (only the summary, do not include any title)"
+            "\\ntimestamp (min:sec)\\nsummary of the event (only the summary, do not include any title)\\nlater summaries. print an empty line "
+            "between length of video and overall summary, overall and event summaries, and between each event summaries. Do not print anything "
+            "like 'here is the result' or 'here are the summaries'"])
 
     with open("log.txt", "a") as file:
         file.write(response.text)
-        file.write("-" * 100 + "\n\n")
+        file.write("\n\n" + "-" * 100 + "\n\n")
 
     print("Write complete")
 
-def process_video(file_path, time):
+def process_video(file_path, time = 125):
     open("log.txt", "w").close()
     num_slices = chop_video(file_path, time)
     base, extension = os.path.splitext(os.path.basename(file_path))
@@ -85,9 +85,9 @@ def query(query_text):
             " Each section of summary represent the summary of the chunk, which include"
             " the length of the chunk, a overall summary of the chunk and timestamps and summary"
             " of events that occured in the chunk. Please use these information to answer the question given, "
-            "and provide timestamp citations (in terms of the overall video. For example, if first chunk is 50 second,"
-            " then second chunk's 35 second entry's citation is 1:25 in terms of the overall video.) "
-            "print everything in terms of the overall video for both answers to the questions and the citation, do not mention chunks at all",
+            "and provide timestamp citations (in terms of the overall video. For chunks other than the first one, "
+            "sum the time stamp with the previous chunk's lengthes) print everything in terms of the overall video "
+            "for both answers to the questions and the citations timestamps, do not reference chunks or segment in the response",
             query_text
         ]
     )
@@ -97,5 +97,5 @@ def query(query_text):
 
     print("Query complete")
 
-process_video("C:/Users/huyic/Desktop/high school files/Chemistry Final Project.mp4", 80)
-query("What's wrong with the van in Simpsons according to the video? Why does it defy physics or chemistry?")
+process_video("C:/Users/huyic/Desktop/cam_out_h264_07.mp4")
+query("What are the names of the two team tat's playing?")
