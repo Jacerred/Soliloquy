@@ -30,7 +30,7 @@ def chop_video(input_file, slice_duration):
     
     clip.close()
     print("Video chopping complete.")
-    return num_slices
+    return num_slices, total_duration
 
 def upload_image(file_path):
     print("Uploading file")
@@ -64,7 +64,7 @@ def upload_image(file_path):
 
 def process_video(file_path, time = 125):
     open("log.txt", "w").close()
-    num_slices = chop_video(file_path, time)
+    num_slices, total_duration = chop_video(file_path, time)
     base, extension = os.path.splitext(os.path.basename(file_path))
 
     for i in range(1, num_slices + 1):
@@ -72,6 +72,8 @@ def process_video(file_path, time = 125):
         upload_image(part_path)
         if os.path.exists(part_path):
             os.remove(part_path)
+    
+    return total_duration
 
 def query(query_text):
     with open("log.txt", "r") as file:
@@ -81,10 +83,10 @@ def query(query_text):
         model="gemini-2.5-pro-exp-03-25",
         contents=[
             output_content,
-            "Here is a summary of a video, which is sliced to chunks of maximum 10 minute."
-            " Each section of summary represent the summary of the chunk, which include"
-            " the length of the chunk, a overall summary of the chunk and timestamps and summary"
-            " of events that occured in the chunk. Please use these information to answer the question given, "
+            "Here is a summary of a video. The summary is divided into sections, each belong to a different chunk "
+            "of the videos. Each section of summary represent the summary of the chunk, which include "
+            "the length of the chunk, a overall summary of the chunk and timestamps and summary "
+            "of events that occured in the chunk. Please use these information to answer the question given, "
             "and provide timestamp citations (in terms of the overall video. For chunks other than the first one, "
             "sum the time stamp with the previous chunk's lengthes) print everything in terms of the overall video "
             "for both answers to the questions and the citations timestamps, do not reference chunks or segment in the response",
@@ -97,5 +99,26 @@ def query(query_text):
 
     print("Query complete")
 
-process_video("C:/Users/huyic/Desktop/cam_out_h264_07.mp4")
-query("What are the names of the two team tat's playing?")
+def overall_summary():
+    with open("log.txt", "r") as file:
+        output_content = file.read()
+
+    response = client.models.generate_content(
+        model="gemini-2.5-pro-exp-03-25",
+        contents=[
+            output_content,
+            "Here is a summary of a video. The summary is divided into sections, each belong to a different chunk "
+            "of the videos. Each section of summary represent the summary of the chunk, which include "
+            "the length of the chunk, a overall summary of the chunk and timestamps and summary of events "
+            "that occured in the chunk. Please use these information to geneate an overall summary for the entire video"
+        ]
+    )
+
+    with open("summary.txt", "w") as file:
+        file.write(response.text)
+
+    print("Summary complete")
+
+duration = process_video("C:/Users/huyic/Desktop/cam_out_h264_07.mp4", 101)
+query("Who are the sideline reporters?")
+overall_summary()
