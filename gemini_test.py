@@ -128,7 +128,7 @@ def overall_summary():
     print("Summary complete")
 
 def query_with_db(db_output, query_text):
-    merged_string = "\n\n".join(doc for doc in data["documents"][0])
+    merged_string = "\n\n".join(doc for doc in db_output["documents"][0])
 
     response = client.models.generate_content(
         model="gemini-2.5-pro-exp-03-25",
