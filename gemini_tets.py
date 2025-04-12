@@ -127,6 +127,29 @@ def overall_summary():
 
     print("Summary complete")
 
+def query_with_db(db_output, query_text):
+    merged_string = "\n\n".join(doc for doc in data["documents"][0])
+
+    response = client.models.generate_content(
+        model="gemini-2.5-pro-exp-03-25",
+        contents=[
+            merged_string,
+            "Here is a part of the summary of a video. The summary is divided into sections, each belong to a different chunk "
+            "of the videos. Each section of summary represent the summary of the chunk, which include "
+            "the length of the chunk, a overall summary of the chunk and timestamps and summary  that occured in the chunk. "
+            "The chunks in this summary are the most relavent ones. Please use these information to answer the question given, "
+            "and provide timestamp citations (in terms of the overall video. For chunks other than the first one, "
+            "sum the time stamp with the previous chunk's lengthes) print everything in terms of the overall video "
+            "for both answers to the questions and the citations timestamps, do not reference chunks or segment in the response",
+            query_text
+        ]
+    )
+
+    with open("query_db_result.txt", "w") as file:
+        file.write(response.text)
+
+    print("Query complete")
+
 process_video("C:/Users/huyic/Desktop/high school files/Chemistry Final Project.mp4", 101)
-#query("What are the things that violated physics or chemistry spotted by the video??")
-#overall_summary()
+query("What are the things that violated physics or chemistry spotted by the video??")
+overall_summary()
