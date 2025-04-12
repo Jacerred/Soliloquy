@@ -64,4 +64,4 @@ def query_vector(query: str, n_results: int = 1):
 if __name__ == "__main__":
     #vectorize("I like hamburgers", datetime.now(), datetime.now())
     #vectorize("I like dogs", datetime.now(), datetime.now())
-    print(query_vector("Summary of some shit", 2))
+    print(query_vector("Who is the sideline reporter?", 2))
