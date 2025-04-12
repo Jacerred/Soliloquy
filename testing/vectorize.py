@@ -1,5 +1,6 @@
 import chromadb
 from datetime import datetime
+import uuid
 
 # Chroma DB Setup
 client = chromadb.Client()
@@ -24,7 +25,8 @@ Params:
 def vectorize(document: str, start_time: datetime, end_time: datetime):
     collection.add(
         documents=[document],
-        metadatas=[{"start_time": start_time, "end_time": end_time}],
+        ids=[str(uuid.uuid4())],
+        metadatas=[{"start_time": start_time.strftime("%Y-%m-%d %H:%M:%S"), "end_time": end_time.strftime("%Y-%m-%d %H:%M:%S")}],
     )
 
 """
@@ -33,8 +35,9 @@ Params:
     query: string
     n_results: int
 
-Returns dict of documents and m
+Returns dict of documents and timestamps
 {"documents": [[document1], [document2], ...], "metadatas": [{"start_time": start_time, "end_time": end_time}, {"start_time": start_time, "end_time": end_time}, ...]}
+Timestamps are datetime objects
 """
 def query_vector(query: str, n_results: int = 1):
     query_results = collection.query(
@@ -42,8 +45,21 @@ def query_vector(query: str, n_results: int = 1):
         n_results=n_results,
     )
 
-    return query_results["documents"]
+    # Convert timestamps to datetime objects
+    datetimes = []
+    #print(query_results["metadatas"])
+    for val in query_results["metadatas"]:
+        if val[0] is not None:
+            print(val)
+            time_dict = {}
+            time_dict["start_time"] = datetime.strptime(val[0]["start_time"], "%Y-%m-%d %H:%M:%S")
+            time_dict["end_time"] = datetime.strptime(val[0]["end_time"], "%Y-%m-%d %H:%M:%S")
+            datetimes.append(time_dict)
+
+
+    return {"documents": query_results["documents"], "metadatas": datetimes}
 
 if __name__ == "__main__":
-    vectorize(["Hello, world!"])
-    print(query_vector("!", 1))
+    #vectorize("I like hamburgers", datetime.now(), datetime.now())
+    #vectorize("I like dogs", datetime.now(), datetime.now())
+    print(query_vector("I want dogs", 2))
