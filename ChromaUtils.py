@@ -1,6 +1,6 @@
 import chromadb
 from datetime import datetime
-import uuid
+import uuid, os
 
 # Chroma DB Setup
 client = chromadb.Client()
@@ -12,7 +12,8 @@ client = chromadb.PersistentClient(path=CHROMA_DATA_PATH)
 
 collection = client.get_or_create_collection(
     name=COLLECTION_NAME,
-    metadata={"hnsw:space": "cosine"},
+    metadata={"hnsw:space": "cosine", 
+    "hnsw:num_threads": 1},
 )
 
 """

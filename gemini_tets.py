@@ -30,7 +30,7 @@ def chop_video(input_file, slice_duration):
     
     clip.close()
     print("Video chopping complete.")
-    return num_slices, total_duration
+    return num_slices
 
 def upload_image(file_path):
     print("Uploading file")
@@ -46,14 +46,24 @@ def upload_image(file_path):
 
     print('Video is active')
 
+    with open("log.txt", "a") as file:
+        clip = VideoFileClip(file_path)
+        total_duration = clip.duration
+        clip.close()
+
+        hours = int(total_duration // 3600)
+        minutes = int((total_duration % 3600) // 60)
+        seconds = int(total_duration % 60)
+        file.write(f"length of video ({hours:02d} hours {minutes:02d} minutes {seconds:02d} second)\n\n")
+
     response = client.models.generate_content(
         model="gemini-2.0-flash",
         contents=[
             video_file,
-            "First find the length of the video, then summarize this video in a paragraph. In addition, generate a summary of the scene every 5 second. "
-            "Please print in the format: length of video (.. hours .. minutes .. seocnd)\\noverall summary (only the summary, do not include any title)"
-            "\\ntimestamp (min:sec)\\nsummary of the event (only the summary, do not include any title)\\nlater summaries. print an empty line "
-            "between length of video and overall summary, overall and event summaries, and between each event summaries. Do not print anything "
+            "Summarize this video in a paragraph. In addition, generate a short paragraph of summary of the current scene every 5 second. "
+            "Please print in the format: overall summary (only the summary, do not include any title)\\ntimestamp (min:sec)\\n"
+            "summary of the event (only the summary, do not include any title)\\nlater summaries. print an empty line between length"
+            " of video and overall summary, overall and event summaries, and between each event summaries. Do not print anything "
             "like 'here is the result' or 'here are the summaries'"])
 
     with open("log.txt", "a") as file:
@@ -64,7 +74,7 @@ def upload_image(file_path):
 
 def process_video(file_path, time = 125):
     open("log.txt", "w").close()
-    num_slices, total_duration = chop_video(file_path, time)
+    num_slices = chop_video(file_path, time)
     base, extension = os.path.splitext(os.path.basename(file_path))
 
     for i in range(1, num_slices + 1):
@@ -72,8 +82,6 @@ def process_video(file_path, time = 125):
         upload_image(part_path)
         if os.path.exists(part_path):
             os.remove(part_path)
-    
-    return total_duration
 
 def query(query_text):
     with open("log.txt", "r") as file:
@@ -119,6 +127,6 @@ def overall_summary():
 
     print("Summary complete")
 
-duration = process_video("C:/Users/huyic/Desktop/cam_out_h264_07.mp4", 101)
-query("Who are the sideline reporters?")
-overall_summary()
+process_video("C:/Users/huyic/Desktop/high school files/Chemistry Final Project.mp4", 101)
+#query("What are the things that violated physics or chemistry spotted by the video??")
+#overall_summary()
