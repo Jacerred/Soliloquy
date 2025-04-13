@@ -131,13 +131,13 @@ Params -  {query: “Where did i lose my phone???”}
 Returns {"response": “You lost your phone …”}
 """
 @app.post("/api/queryVideo")
-async def queryVideo(query_string: Annotated[str, Form()]):
+async def queryVideo(prompt: Annotated[str, Form()]):
     print("Query video endpoint hit")
 
     # get log_content from mongoDB
     log_content = fetchMongoDay(db_username, datetime.now())["Log"]
 
-    return {"response": query(query_string, log_content)}
+    return {"response": query(prompt, log_content)}
 
 """
 Query whole journal flow:
@@ -145,12 +145,12 @@ Query whole journal flow:
 - Call whole journal query func
 """
 @app.post("/api/queryJournal")
-async def queryJournal(query_string: Annotated[str, Form()]):
+async def queryJournal(prompt: Annotated[str, Form()]):
     print("Query journal endpoint hit")
 
     # call whole journal query func
-    db_output = query_vector(query_string, 5)
-    response = query_with_db(db_output, query_string)
+    db_output = query_vector(prompt, 5)
+    response = query_with_db(db_output, prompt)
 
     return {"response": response}
 
