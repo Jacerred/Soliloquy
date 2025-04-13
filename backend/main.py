@@ -11,7 +11,7 @@ from moviepy.editor import VideoFileClip
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from fastapi import FastAPI, Form
-
+from dotenv import load_dotenv
 
 app = FastAPI()
 # I hate CORS
@@ -30,7 +30,8 @@ app.add_middleware(
 )
 
 # MongoDB Credentials ----------------------------------------------------------
-cluster = MongoClient("mongodb+srv://jasonxwanggg9:RJozaS4Ahx91CbYd@cluster0.jcbj8gl.mongodb.net/?retryWrites=true&w=majority")
+load_dotenv()
+cluster = MongoClient(os.getenv("MONGO_URI"))
 
 db = cluster["Soliloquy"]
 collection = db["UserData"]

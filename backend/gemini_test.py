@@ -7,7 +7,7 @@ import os
 from moviepy.video.io.ffmpeg_tools import ffmpeg_extract_subclip
 from moviepy.editor import VideoFileClip
 
-client = genai.Client(api_key="AIzaSyBQDwNYgMHZTMrX7w6XlWFatG0TPx2XunQ")
+client = genai.Client(api_key="")
 
 def chop_video(input_file, slice_duration):
     clip = VideoFileClip(input_file)

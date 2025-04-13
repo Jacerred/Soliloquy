@@ -6,8 +6,11 @@ import platform
 import os
 from moviepy.video.io.ffmpeg_tools import ffmpeg_extract_subclip
 from moviepy.editor import VideoFileClip
+from dotenv import load_dotenv
 
-client = genai.Client(api_key="AIzaSyDOJvuh4A2ekpwJtD3jFYMqA0H_VkFGeQg")
+load_dotenv()
+
+client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
 def chop_video(input_file, slice_duration):
     clip = VideoFileClip(input_file)
