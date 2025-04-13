@@ -9,7 +9,7 @@ import JournalDatesList from './components/JournalDatesList';
 
 function App() {
   const [date, setDate] = useState(new Date());
-  const [journalData, setJournalData] = useState({ title: "", text: "" });
+  const [journalData, setJournalData] = useState({ title: "", text: "", fileName: "" });
 
   // Main content component that includes the date picker and navigation logic
   function MainContent() {
@@ -37,8 +37,12 @@ function App() {
           setJournalData({
             title: formattedDate,
             text: data.response,
-            fileName: data.filepath ? data.filepath : null
+            fileName: data.filepath 
           });
+
+          // print the journal data
+          console.log(data.filepath);
+
           navigate('/journal');
         })
         .catch(error => {

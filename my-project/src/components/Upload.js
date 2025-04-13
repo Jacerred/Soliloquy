@@ -74,7 +74,6 @@ function Upload() {
         return (
             <div>
                 <div className="mt-10 mr-40 ml-40">
-                <button onClick={videoGen} className="w-full">click me</button>
                     <div
                         className="flex items-center justify-center w-full"
                         onDragOver={handleDragOver}
