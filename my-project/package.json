@@ -22,7 +22,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "electron": "electron .",
-    "dist": "electron-builder"
+    "dist": "electron-builder",
+    "postinstall": "flowbite-react patch && flowbite-react register"
   },
   "eslintConfig": {
     "extends": [
