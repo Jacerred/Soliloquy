@@ -1,8 +1,10 @@
 function Page({ title, text }) {
     return (
-        <div>
-            <h1 className="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-xl dark:text-white">{title}</h1>
-            <p className="mb-6 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-400">{text}</p>
+        <div className="h-full">
+            <h1 className="text-2xl md:text-3xl font-bold text-white mb-6 pb-2 border-b border-gray-700">{title}</h1>
+            <div className="prose prose-invert max-w-none">
+                <p className="text-gray-300 whitespace-pre-line">{text}</p>
+            </div>
         </div>
     );
 }

@@ -45,34 +45,49 @@ function App() {
     };
 
     return (
-      <>
-        <NavBar setJournalData={setJournalData} />
-        <div className='flex'>
-          <div className='h-full'>
-            <Datepicker onChange={handleDateChange} value={date}/>
-          </div>
-          <div className='w-full h-full'>
-            <Routes>
-              <Route path='/' element={< Main />}/>
-              <Route path='/journal' element={< Page title={journalData.title} text={journalData.text} />}/>
-            </Routes>
+      <div className="min-h-screen flex flex-col bg-gradient-to-b from-slate-900 via-indigo-950 to-slate-900 text-white">
+        {/* Memory wave pattern overlay */}
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB4PSIwIiB5PSIwIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSgzMCkiPjxwYXRoIGQ9Ik0gMCwxMCBDIDEwLDIwIDIwLDAgMjAsLTEwIiBzdHJva2U9InJnYmEoNjIsMTA0LDI1NSwwLjEpIiBzdHJva2Utd2lkdGg9IjEuNSIgZmlsbD0ibm9uZSI+PC9wYXRoPjwvcGF0dGVybj48cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI3BhdHRlcm4pIj48L3JlY3Q+PC9zdmc+')] opacity-20 pointer-events-none"></div>
+        
+        {/* Main content */}
+        <div className="relative z-10 flex flex-col flex-1">
+          <NavBar setJournalData={setJournalData} />
+          
+          <div className="flex flex-1 p-6">
+            <div className="w-64 mr-6">
+              <div className="p-4 bg-slate-800/70 backdrop-blur-sm rounded-xl shadow-[0_0_15px_rgba(74,109,255,0.2)] border border-indigo-500/10">
+                <h3 className="text-lg font-medium mb-4 text-center text-indigo-200">Memory Timeline</h3>
+                <Datepicker 
+                  onChange={handleDateChange} 
+                  value={date}
+                  theme={{
+                    root: {
+                      base: "relative",
+                      input: {
+                        base: "z-20 rounded-lg bg-slate-700/40 border border-indigo-500/30 focus:border-indigo-400"
+                      }
+                    }
+                  }}
+                />
+              </div>
+            </div>
+            
+            <div className="flex-1 bg-slate-800/70 backdrop-blur-sm rounded-xl shadow-[0_0_15px_rgba(74,109,255,0.2)] p-6 border border-indigo-500/10">
+              <Routes>
+                <Route path='/' element={<Main />}/>
+                <Route path='/journal' element={<Page title={journalData.title} text={journalData.text} />}/>
+              </Routes>
+            </div>
           </div>
         </div>
-      </>
+      </div>
     );
   }
   
   return (
-    <>
-      <div className='flex'>
-
-      </div>
-      <div className='bg-gray-900 text-white'>
-        <Router>
-          <MainContent />
-        </Router>
-      </div>
-    </>
+    <Router>
+      <MainContent />
+    </Router>
   );
 }
 
