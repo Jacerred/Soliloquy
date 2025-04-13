@@ -48,7 +48,8 @@ function JournalDatesList({ setJournalData }) {
                 // Save journal data and navigate to journal page
                 setJournalData({
                     title: date,
-                    text: data.response
+                    text: data.response,
+                    fileName: data.filepath
                 });
                 navigate('/journal');
             })
