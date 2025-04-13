@@ -46,7 +46,7 @@ function App() {
 
     return (
       <>
-        <NavBar />
+        <NavBar setJournalData={setJournalData} />
         <div className='flex'>
           <div className='h-full'>
             <Datepicker onChange={handleDateChange} value={date}/>

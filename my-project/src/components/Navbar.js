@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import QueryVideo from "./QueryVideo";
 import SearchBar from "./SearchBar";
 
-function NavBar() {
+function NavBar({ setJournalData }) {
     const navigate = useNavigate();
     function trust(route) {
         navigate(route);
@@ -29,7 +29,7 @@ function NavBar() {
                 Upload
                 </span>
             </button>
-            <SearchBar/>
+            <SearchBar setJournalData={setJournalData} />
         </div>
     );
 }
