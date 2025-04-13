@@ -96,25 +96,18 @@ function SearchBar({ setJournalData }) {
         </svg>
     );
 
-    // Memory search icon
-    const MemoryIcon = () => (
-        <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-          <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd"></path>
-        </svg>
-    );
-
     return (
         <div className="flex items-center ml-auto">
             <div className="relative flex" ref={dropdownRef}>
                 {/* Unified Search Container with Gradient Border */}
-                <div className="relative p-0.5 rounded-lg bg-gradient-to-r from-cyan-500 to-indigo-600 flex">
+                <div className="relative p-0.5 rounded-lg bg-gradient-to-br from-teal-700 to-teal-900 flex">
                     {/* Dropdown Button */}
                     <button
-                        className="flex items-center justify-center h-full rounded-l-md bg-slate-900 group-hover:bg-opacity-0 transition-all duration-75 ease-in"
+                        className="flex items-center justify-center h-full rounded-l-md bg-gray-800/90 group-hover:bg-opacity-0 transition-all duration-75 ease-in"
                         onClick={toggleDropdown}
                         disabled={isLoading}
                     >
-                        <span className={`px-4 py-2 text-sm font-medium ${isLoading ? 'text-slate-500' : 'text-indigo-200'}`}>
+                        <span className={`px-4 py-2 text-sm font-medium ${isLoading ? 'text-gray-500' : 'text-gray-300'}`}>
                             {selected} <span className="ml-1">▼</span>
                         </span>
                     </button>
@@ -124,54 +117,51 @@ function SearchBar({ setJournalData }) {
                         type="text"
                         value={searchText}
                         onChange={(e) => setSearchText(e.target.value)}
-                        placeholder="Search your memories..."
-                        className={`w-64 px-3 py-2 text-sm text-white bg-slate-900 border-none focus:ring-0 focus:outline-none placeholder-indigo-300/40 ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
+                        placeholder="Search memories..."
+                        className={`w-64 px-3 py-2 text-sm text-gray-200 bg-gray-800/90 border-none focus:ring-0 focus:outline-none placeholder-gray-500 ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
                         disabled={isLoading}
                     />
                     
                     {/* Search Button */}
                     <button
-                        className={`flex items-center justify-center rounded-r-md bg-slate-900 transition-all duration-75 ease-in px-4 py-2 text-sm font-medium 
-                        ${isLoading ? 'cursor-not-allowed text-slate-500' : 'hover:bg-opacity-0 hover:text-white text-indigo-200'}`}
+                        className={`flex items-center justify-center rounded-r-md bg-gray-800/90 transition-all duration-75 ease-in px-4 py-2 text-sm font-medium 
+                        ${isLoading ? 'cursor-not-allowed text-gray-500' : 'hover:bg-opacity-0 hover:text-white text-gray-300'}`}
                         onClick={handleSubmit}
                         disabled={isLoading || !searchText.trim()}
                     >
                         {isLoading ? (
                             <div className="flex items-center">
                                 <LoadingSpinner />
-                                <span>Searching...</span>
+                                <span className="text-gray-400">Searching...</span>
                             </div>
                         ) : (
-                            <span className="flex items-center">
-                                <MemoryIcon />
-                                Search
-                            </span>
+                            'Search'
                         )}
                     </button>
                 </div>
                 
-                {/* Dropdown Menu - with higher z-index to ensure it appears over other elements */}
+                {/* Dropdown Menu */}
                 {isDropdownOpen && !isLoading && (
-                    <div className="absolute z-50 top-full left-0 mt-1 w-48 bg-slate-800 rounded-lg shadow-[0_4px_12px_rgba(0,0,0,0.3)] border border-indigo-500/20">
+                    <div className="absolute z-10 top-full left-0 mt-1 w-48 bg-gray-800 rounded-lg shadow-lg border border-teal-900/50">
                         <ul className="py-1">
                             <li 
-                                className="px-4 py-2 hover:bg-indigo-600/20 cursor-pointer text-sm text-indigo-200"
+                                className="px-4 py-2 hover:bg-teal-700/50 cursor-pointer text-sm text-gray-300"
                                 onClick={() => handleSelectOption("Find Day")}
                             >
-                                Search in Today's Journal
+                                Today's Memories
                             </li>
                             <li 
-                                className="px-4 py-2 hover:bg-indigo-600/20 cursor-pointer text-sm text-indigo-200"
+                                className="px-4 py-2 hover:bg-teal-700/50 cursor-pointer text-sm text-gray-300"
                                 onClick={() => handleSelectOption("Find All")}
                             >
-                                Search in All Journals
+                                All Memories
                             </li>
                         </ul>
                     </div>
                 )}
             </div>
             
-            {result && <div className="ml-2 text-sm text-red-400">{result}</div>}
+            {result && <div className="ml-2 text-sm text-red-500">{result}</div>}
         </div>
     );
 }
