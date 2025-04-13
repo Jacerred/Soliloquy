@@ -20,7 +20,9 @@ function QueryVideo() {
 
     // Determine the endpoint based on the dropdown selection.
     const endpoint =
-      dropdownValue === "Today" ? "http://localhost:8000/api/queryVideo" : "http://localhost:8000/api/queryJournal";
+      dropdownValue === "Today"
+        ? "http://localhost:8000/api/queryVideo"
+        : "http://localhost:8000/api/queryJournal";
 
     // Use fetch to send the form data (only the prompt) to the chosen endpoint.
     fetch(endpoint, {
@@ -52,13 +54,13 @@ function QueryVideo() {
             id="prompt-input"
             name="prompt"
             placeholder="Enter your prompt here..."
-            className="w-[600px] h-28 p-2 border border-gray-300 rounded resize-y overflow-auto"
+            className="w-[600px] h-28 p-2 border border-gray-300 rounded resize-y overflow-auto text-black"
           ></textarea>
 
           {/* Submit button on the right */}
           <button
             type="submit"
-            className="px-4 py-2 ml-4 bg-gradient-to-br from-purple-600 to-blue-500 text-white rounded hover:from-purple-600 hover:to-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-300"
+            className="px-4 py-2 ml-4 bg-gradient-to-br from-purple-600 to-blue-500 text-black rounded hover:from-purple-600 hover:to-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-300"
           >
             Submit
           </button>
@@ -66,13 +68,13 @@ function QueryVideo() {
 
         {/* Dropdown and title arranged horizontally, with title on the left */}
         <div className="mt-4 flex justify-center items-center">
-          <label htmlFor="dateOption" className="mr-2">
+          <label htmlFor="dateOption" className="mr-2 text-black">
             Select Date Option:
           </label>
           <select
             id="dateOption"
             name="dateOption"
-            className="p-2 border border-gray-300 rounded"
+            className="p-2 border border-gray-300 rounded text-black"
           >
             <option value="Today">Today</option>
             <option value="All Dates">All Dates</option>
@@ -86,7 +88,7 @@ function QueryVideo() {
             value={result}
             readOnly
             placeholder="Result logs will appear here..."
-            className="w-full h-64 p-2 border border-gray-300 rounded resize-y overflow-auto"
+            className="w-full h-64 p-2 border border-gray-300 rounded resize-y overflow-auto text-black"
           ></textarea>
         </div>
       </form>
