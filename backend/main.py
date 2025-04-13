@@ -84,24 +84,28 @@ def processVideo(filename: Annotated[str, Form()]):
         formatted_chunk = chunk.strip()
         if (len(formatted_chunk) == 0):
             continue
-        duration_string = formatted_chunk.split("\n")[0]
-        duration_string = duration_string.replace("length of video (", "").replace(")", "")
 
-        parts = duration_string.split()
-        hours = int(parts[0])
-        minutes = int(parts[2])
-        seconds = int(parts[4])
+        try: 
+            duration_string = formatted_chunk.split("\n")[0]
+            duration_string = duration_string.replace("length of video (", "").replace(")", "")
 
-        # Create timedelta object - represents duration of chunk
-        time_delta = timedelta(hours=hours, minutes=minutes, seconds=seconds)
+            parts = duration_string.split()
+            hours = int(parts[0])
+            minutes = int(parts[2])
+            seconds = int(parts[4])
 
-        # Calculate start + end time of chunk
-        chunk_start_time = start_time + start_time_delta
-        chunk_end_time = chunk_start_time + time_delta
+            # Create timedelta object - represents duration of chunk
+            time_delta = timedelta(hours=hours, minutes=minutes, seconds=seconds)
 
-        vectorize(formatted_chunk, chunk_start_time, chunk_end_time)
+            # Calculate start + end time of chunk
+            chunk_start_time = start_time + start_time_delta
+            chunk_end_time = chunk_start_time + time_delta
 
-        start_time_delta += time_delta
+            vectorize(formatted_chunk, chunk_start_time, chunk_end_time)
+
+            start_time_delta += time_delta
+        except:
+            continue
 
     log_summary = overall_summary(log_content)
 
