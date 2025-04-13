@@ -126,6 +126,34 @@ def fetchMongoDay(username: str, timestamp: datetime):
             return x
 
 """
+Post - /api/getJournal
+Params - form data with date in format YYYY-MM-DD
+Returns - {"response": "Summary of the day"}
+"""
+@app.post("/api/getJournal")
+async def getJournal(date: Annotated[str, Form()]):
+    print("Get journal endpoint hit")
+
+    date = datetime.strptime(date, "%Y-%m-%d")
+    content = fetchMongoDay(db_username, date)["Summary"]
+
+    return {"response": content}
+
+"""
+Post - /api/queryVideo
+Params -  {query: “Where did i lose my phone???”}
+Returns {"response": “You lost your phone …”}
+"""
+@app.post("/api/queryVideo")
+async def queryVideo(prompt: Annotated[str, Form()]):
+    print("Query video endpoint hit")
+
+    # get log_content from mongoDB
+    log_content = fetchMongoDay(db_username, datetime.now())["Log"]
+
+    return {"response": query(prompt, log_content)}
+
+"""
 Post - /api/queryVideo
 Params -  {query: “Where did i lose my phone???”}
 Returns {"response": “You lost your phone …”}
