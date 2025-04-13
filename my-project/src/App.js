@@ -46,12 +46,12 @@ function App() {
     };
 
     return (
-      <div className="min-h-screen flex flex-col bg-gradient-to-br from-gray-900 via-indigo-950 to-gray-900 text-white font-sans">
+      <div className="h-screen overflow-hidden flex flex-col bg-gradient-to-br from-gray-900 via-indigo-950 to-gray-900 text-white font-sans">
         <NavBar setJournalData={setJournalData} />
         
         <div className="flex flex-1 p-6">
           <div className="w-72 mr-6 relative z-10">
-            <div className="p-5 bg-gray-800/70 backdrop-blur-sm rounded-xl shadow-xl border border-indigo-500/20">
+            <div className="p-5 bg-gray-800/70 rounded-xl shadow-xl border border-indigo-500/20">
               <div className="flex items-center mb-4">
                 <svg className="w-5 h-5 mr-2 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
@@ -62,6 +62,7 @@ function App() {
               <Datepicker 
                 onChange={handleDateChange} 
                 value={date}
+                showClearButton={false}
                 theme={{
                   root: {
                     base: "relative"
@@ -83,7 +84,7 @@ function App() {
         </div>
         
         <div className="px-6 py-3 text-center text-xs text-indigo-300">
-          <p>MemoryLens - Your personal memory journal powered by smart glasses</p>
+          <p>Soliloquy - Your personal memory journal powered by smart glasses</p>
         </div>
       </div>
     );

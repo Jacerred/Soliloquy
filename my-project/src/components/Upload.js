@@ -6,6 +6,7 @@ function Upload() {
     const [file, setFile] = useState(null);
     const [isDragOver, setIsDragOver] = useState(false);
     const [isFileJustUploaded, setIsFileJustUploaded] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
         let timeoutId;
@@ -24,6 +25,13 @@ function Upload() {
         };
     }, [file]);
 
+    // Loading spinner component
+    const LoadingSpinner = () => (
+        <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+    );
 
     function VideoPicker() {
         const handleSelect = async () => {
@@ -127,13 +135,20 @@ function Upload() {
                 <div className="flex justify-center mt-10">
                     <button
                         type="submit"
-                        className={`relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 ${
-                            !file ? 'opacity-50 cursor-not-allowed' : ''
+                        className={`relative inline-flex items-center justify-center p-0.5 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-indigo-600 group-hover:from-cyan-500 group-hover:to-indigo-600 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 ${ 
+                            !file || isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
                         }`}
-                        disabled={!file}
+                        disabled={!file || isSubmitting}
                     >
                         <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
-                            Upload
+                            {isSubmitting ? (
+                                <div className="flex items-center">
+                                    <LoadingSpinner />
+                                    <span>Uploading...</span>
+                                </div>
+                            ) : (
+                                "Upload"
+                            )}
                         </span>
                     </button>
                 </div>
@@ -145,19 +160,35 @@ function Upload() {
         // Prevent the browser from reloading the page
         e.preventDefault();
         
+        // Set submitting state
+        setIsSubmitting(true);
+        
         // Read the form data
         const form = e.target;
         const formData = new FormData(form);
         formData.append("filename", filePath);
-
 
         // handle as json (for debugging)
         //const formJson = Object.fromEntries(formData.entries());
         //console.log(formJson);
 
         // You can pass formData as a fetch body directly:
-        fetch('http://127.0.0.1:8000/api/processVideo', { method: form.method, body: formData });
+        fetch('http://127.0.0.1:8000/api/processVideo', { 
+            method: form.method, 
+            body: formData 
+        })
+        .then(response => {
+            // Reset submitting state when complete (successful or not)
+            setTimeout(() => {
+                setIsSubmitting(false);
+            }, 1000); // Add a slight delay for better UX
+        })
+        .catch(error => {
+            console.error('Error uploading:', error);
+            setIsSubmitting(false);
+        });
     }
+    
     return (
         <div className="flex justify-center items-center h-screen">
             <form method="post" onSubmit={handleSubmit}>

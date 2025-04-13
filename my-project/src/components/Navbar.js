@@ -10,17 +10,10 @@ function NavBar({ setJournalData }) {
         <div className="relative z-20 flex items-center px-6 py-4 bg-gray-800/80 backdrop-blur-md shadow-lg border-b border-indigo-500/20">
             <div className="flex items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-cyan-400 mr-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M15.5 12a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0z"></path>
-                    <path d="M12 2v1"></path>
-                    <path d="M12 21v1"></path>
-                    <path d="M4.22 4.22l.77.77"></path>
-                    <path d="M19.01 19.01l.77.77"></path>
-                    <path d="M2 12h1"></path>
-                    <path d="M21 12h1"></path>
-                    <path d="M4.22 19.78l.77-.77"></path>
-                    <path d="M19.01 4.99l.77-.77"></path>
+                    <polygon points="23 7 16 12 23 17 23 7"></polygon>
+                    <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
                 </svg>
-                <h1 className="text-xl font-bold text-cyan-100">MemoryLens</h1>
+                <h1 className="text-xl font-bold text-cyan-100">Soliloquy</h1>
             </div>
             
             <div className="flex gap-3 ml-8">
