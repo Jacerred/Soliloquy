@@ -7,12 +7,12 @@ import NavBar from './components/Navbar';
 function App() {
   return (
     <>
-      <NavBar />
       <div className='flex'>
 
       </div>
-      <div className='bg-gray=900 text-white'>
+      <div className='bg-gray-900 text-white'>
         <Router>
+          <NavBar />
           <Routes>
             <Route path='/' element={< Upload />}/>
             <Route path='/journal' element= {< Page />}/>
