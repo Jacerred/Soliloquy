@@ -59,7 +59,6 @@ processVideo(json params)
 def processVideo(filename: Annotated[str, Form()]):
     print("Process video endpoint hit")
 
-
     # get start and end time of video from metadata
     start_time = datetime.fromtimestamp(os.path.getctime(filename))
     clip = VideoFileClip(filename)
@@ -110,7 +109,7 @@ def processVideo(filename: Annotated[str, Form()]):
 
     log_summary = overall_summary(log_content)
 
-    uploadMongo(log_summary, log_content, start_time, end_time)
+    uploadMongo(log_summary, log_content, start_time, end_time, filename)
 
     # delete log.txt file
     os.remove(f"{base_dir}\\log.txt")
@@ -133,30 +132,16 @@ def fetchMongoDay(username: str, timestamp: datetime):
 """
 Post - /api/getJournal
 Params - form data with date in format YYYY-MM-DD
-Returns - {"response": "Summary of the day"}
+Returns - {"response": "Summary of the day", "filepath": "filepath of the video"}
 """
 @app.post("/api/getJournal")
 async def getJournal(date: Annotated[str, Form()]):
     print("Get journal endpoint hit")
 
     date = datetime.strptime(date, "%Y-%m-%d")
-    content = fetchMongoDay(db_username, date)["Summary"]
+    content = fetchMongoDay(db_username, date)
 
-    return {"response": content}
-
-"""
-Post - /api/queryVideo
-Params -  {query: “Where did i lose my phone???”}
-Returns {"response": “You lost your phone …”}
-"""
-@app.post("/api/queryVideo")
-async def queryVideo(prompt: Annotated[str, Form()]):
-    print("Query video endpoint hit")
-
-    # get log_content from mongoDB
-    log_content = fetchMongoDay(db_username, datetime.now())["Log"]
-
-    return {"response": query(prompt, log_content)}
+    return {"response": content["Summary"], "filepath": content["filename"]}
 
 """
 Post - /api/queryVideo
@@ -171,6 +156,7 @@ async def queryVideo(prompt: Annotated[str, Form()]):
     log_content = fetchMongoDay(db_username, datetime.now())["Log"]
 
     return {"response": query(prompt, log_content)}
+
 
 """
 Query whole journal flow:
@@ -217,10 +203,10 @@ uploadMongo(summary: str, log_content:str, start_time: datetime, end_time: datet
 - Uploads summary and vectorized data to mongoDB
 """
 
-def uploadMongo(summary: str, log_content: str, start_time: datetime, end_time: datetime):
+def uploadMongo(summary: str, log_content: str, start_time: datetime, end_time: datetime, filename: str):
     try:
         #vectorize(log_content, start_time, end_time)
-        ret = collection.insert_one({"user_name": db_username, "Log": log_content, "Summary": summary, "Start_Time": start_time, "End_Time": end_time})
+        ret = collection.insert_one({"user_name": db_username, "Log": log_content, "Summary": summary, "Start_Time": start_time, "End_Time": end_time, "filename": filename})
         print(ret.inserted_id)
         return {"id": ret.inserted_id}
     except:
