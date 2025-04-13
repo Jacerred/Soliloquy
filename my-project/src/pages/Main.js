@@ -2,13 +2,7 @@ import Upload from "../components/Upload";
 
 function Main() {
     return (
-        <div style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: '100vh'
-        }}
-        className="flex w-full"
+        <div className="flex justify-center items-center h-screen w-full max-w-4xl mx-auto p-4"
         >
             <Upload />
         </div>
