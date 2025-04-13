@@ -8,17 +8,21 @@ function QueryVideo() {
   function handleSubmit(e) {
     e.preventDefault();
 
-    // Create a FormData object from the form.
-    const formData = new FormData(e.target);
+    // Extract the prompt value only.
+    const promptValue = e.target.elements.prompt.value;
 
-    // Retrieve the dropdown selection value.
+    // Create a new FormData object and append only the prompt.
+    const formData = new FormData();
+    formData.append("prompt", promptValue);
+
+    // Retrieve the dropdown selection value (for endpoint selection only).
     const dropdownValue = e.target.elements.dateOption.value;
 
     // Determine the endpoint based on the dropdown selection.
     const endpoint =
       dropdownValue === "Today" ? "/api/queryVideo" : "/api/queryJournal";
 
-    // Use fetch to send the form data to the chosen endpoint.
+    // Use fetch to send the form data (only the prompt) to the chosen endpoint.
     fetch(endpoint, {
       method: e.target.method, // typically "post"
       body: formData,
