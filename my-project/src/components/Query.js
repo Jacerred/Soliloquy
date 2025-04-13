@@ -20,7 +20,7 @@ function QueryVideo() {
 
     // Determine the endpoint based on the dropdown selection.
     const endpoint =
-      dropdownValue === "Today" ? "/api/queryVideo" : "/api/queryJournal";
+      dropdownValue === "Today" ? "http://localhost:8000/api/queryVideo" : "http://localhost:8000/api/queryJournal";
 
     // Use fetch to send the form data (only the prompt) to the chosen endpoint.
     fetch(endpoint, {
