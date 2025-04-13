@@ -8,6 +8,7 @@ process.on('uncaughtException', (err) => {
 const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
 const isDev = require('electron-is-dev');
+const fs = require('fs');
 
 let mainWindow;
 
@@ -43,11 +44,20 @@ ipcMain.handle('select-video', async () => {
     });
     
     if (!result.canceled) {
-        //console.log(result);
-        return result.filePaths[0]; // Full path to the selected file
+        return result.filePaths[0];
     } else {
       return null;
     }
+});
+
+ipcMain.handle('get-video', async (event, filePath) => {
+  const buffer = fs.readFileSync(filePath);
+  const base64 = buffer.toString('base64');
+
+  return {
+    data: base64,
+    type: 'video/mp4', // detect this dynamically if needed
+  };
 });
 
 app.on('window-all-closed', () => {

@@ -7,6 +7,7 @@ function Upload() {
     const [isDragOver, setIsDragOver] = useState(false);
     const [isFileJustUploaded, setIsFileJustUploaded] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [videoSrc, setVideoSrc] = useState(null);
 
     useEffect(() => {
         let timeoutId;
@@ -45,6 +46,19 @@ function Upload() {
             }
         };
 
+        const videoGen = async () => {
+            const result = await window.electronAPI.getVideo("C:\\Users\\jacer\\Pictures\\Camera Roll\\WIN_20250413_05_21_48_Pro.mp4");
+            console.log(result);
+            console.log(result.data);
+            const byteCharacters = atob(result.data);
+            const byteNumbers = Array.from(byteCharacters, char => char.charCodeAt(0));
+            const byteArray = new Uint8Array(byteNumbers);
+            const blob = new Blob([byteArray], { type: result.type });
+            const url = URL.createObjectURL(blob);
+            setVideoSrc(url);
+            console.log(videoSrc);
+        }
+
         function handleFileChange(event) {
             const selectedFile = event.target.files[0];
             if (selectedFile) {
@@ -73,7 +87,9 @@ function Upload() {
 
         return (
             <div>
+                <video controls className="w-full" src={videoSrc} />
                 <div className="mt-10 mr-40 ml-40">
+                <button onClick={videoGen} className="w-full">click me</button>
                     <div
                         className="flex items-center justify-center w-full"
                         onDragOver={handleDragOver}
