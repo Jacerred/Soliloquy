@@ -5,18 +5,11 @@ import NavBar from './components/Navbar';
 import Main from './pages/Main';
 import { Datepicker } from "flowbite-react";
 import { useState } from 'react';
+import JournalDatesList from './components/JournalDatesList';
 
 function App() {
   const [date, setDate] = useState(new Date());
   const [journalData, setJournalData] = useState({ title: "", text: "" });
-
-  // Icon component
-  const GlassesIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 inline-block text-teal-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-      <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-    </svg>
-  );
 
   // Main content component that includes the date picker and navigation logic
   function MainContent() {
@@ -53,111 +46,44 @@ function App() {
     };
 
     return (
-      <div className="min-h-screen flex flex-col bg-gray-950 text-gray-200">
+      <div className="min-h-screen flex flex-col bg-gradient-to-br from-gray-900 via-indigo-950 to-gray-900 text-white font-sans">
         <NavBar setJournalData={setJournalData} />
         
-        <div className="flex flex-1 p-4">
-          <div className="w-64 mr-6">
-            <div className="p-4 bg-gray-800/50 rounded-lg shadow-lg border border-teal-900/50">
-              <h3 className="text-lg font-medium mb-3 text-center text-teal-300 flex items-center justify-center">
-                <GlassesIcon /> 
-                Select Recording Date
-              </h3>
+        <div className="flex flex-1 p-6">
+          <div className="w-72 mr-6 relative z-10">
+            <div className="p-5 bg-gray-800/70 backdrop-blur-sm rounded-xl shadow-xl border border-indigo-500/20">
+              <div className="flex items-center mb-4">
+                <svg className="w-5 h-5 mr-2 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                </svg>
+                <h3 className="text-lg font-medium text-center text-cyan-100">Your Memories</h3>
+              </div>
+              <p className="text-xs text-indigo-300 mb-4">Select a date to view your memories captured by your smart glasses</p>
               <Datepicker 
                 onChange={handleDateChange} 
                 value={date}
                 theme={{
                   root: {
-                    base: "relative",
-                  },
-                  popup: {
-                    root: {
-                      base: "absolute top-10 z-50 block pt-2",
-                      inline: "relative top-0 z-auto",
-                      inner: "inline-block rounded-lg bg-gray-700 p-4 shadow-lg dark:bg-gray-700",
-                    },
-                    header: {
-                      base: "",
-                      title: "bg-gray-700 px-2 py-3 text-center font-semibold text-white dark:bg-gray-700 dark:text-white",
-                      selectors: {
-                        base: "mb-2 flex justify-between",
-                        button: {
-                          base: "rounded-lg bg-gray-700 px-5 py-2.5 text-sm font-semibold text-white hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600",
-                          prev: "",
-                          next: "",
-                          view: "",
-                        },
-                      },
-                    },
-                    view: {
-                      base: "p-1",
-                    },
-                    footer: {
-                      base: "mt-2 flex justify-between",
-                      button: {
-                        base: "w-full rounded-lg px-5 py-2 text-center text-sm font-semibold text-white focus:outline-none focus:ring-2 focus:ring-gray-500",
-                        today: "bg-teal-600 hover:bg-teal-700 dark:bg-teal-600 dark:hover:bg-teal-700",
-                        clear: "border border-gray-300 bg-gray-700 hover:bg-gray-600 dark:border-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600",
-                      },
-                    },
-                  },
-                  views: {
-                    days: {
-                      header: {
-                        base: "mb-1 grid grid-cols-7",
-                        title: "h-6 text-center text-sm font-medium leading-6 text-gray-400 dark:text-gray-400",
-                      },
-                      items: {
-                        base: "grid w-64 grid-cols-7",
-                        item: {
-                          base: "block flex-1 cursor-pointer rounded-lg border-0 text-center text-sm font-semibold leading-9 text-gray-100 hover:bg-gray-600 dark:text-white dark:hover:bg-gray-600",
-                          selected: "bg-teal-600 text-white hover:bg-teal-700 dark:bg-teal-600 dark:text-white dark:hover:bg-teal-700",
-                          disabled: "text-gray-500",
-                        },
-                      },
-                    },
-                    months: {
-                      items: {
-                        base: "grid w-64 grid-cols-4",
-                        item: {
-                          base: "block flex-1 cursor-pointer rounded-lg border-0 text-center text-sm font-semibold leading-9 text-gray-100 hover:bg-gray-600 dark:text-white dark:hover:bg-gray-600",
-                          selected: "bg-teal-600 text-white hover:bg-teal-700 dark:bg-teal-600 dark:text-white dark:hover:bg-teal-700",
-                          disabled: "text-gray-500",
-                        },
-                      },
-                    },
-                    years: {
-                      items: {
-                        base: "grid w-64 grid-cols-4",
-                        item: {
-                          base: "block flex-1 cursor-pointer rounded-lg border-0 text-center text-sm font-semibold leading-9 text-gray-100 hover:bg-gray-600 dark:text-white dark:hover:bg-gray-600",
-                          selected: "bg-teal-600 text-white hover:bg-teal-700 dark:bg-teal-600 dark:text-white dark:hover:bg-teal-700",
-                          disabled: "text-gray-500",
-                        },
-                      },
-                    },
-                    decades: {
-                      items: {
-                        base: "grid w-64 grid-cols-4",
-                        item: {
-                          base: "block flex-1 cursor-pointer rounded-lg border-0 text-center text-sm font-semibold leading-9 text-gray-100 hover:bg-gray-600 dark:text-white dark:hover:bg-gray-600",
-                          selected: "bg-teal-600 text-white hover:bg-teal-700 dark:bg-teal-600 dark:text-white dark:hover:bg-teal-700",
-                          disabled: "text-gray-500",
-                        },
-                      },
-                    },
-                  },
+                    base: "relative"
+                  }
                 }}
               />
+              
+              {/* Journal Dates List */}
+              <JournalDatesList setJournalData={setJournalData} />
             </div>
           </div>
           
-          <div className="flex-1 bg-gray-800/50 rounded-lg shadow-lg p-6 border border-teal-900/50">
+          <div className="flex-1 bg-gray-800/70 backdrop-blur-sm rounded-xl shadow-xl p-6 border border-indigo-500/20">
             <Routes>
               <Route path='/' element={<Main />}/>
               <Route path='/journal' element={<Page title={journalData.title} text={journalData.text} />}/>
             </Routes>
           </div>
+        </div>
+        
+        <div className="px-6 py-3 text-center text-xs text-indigo-300">
+          <p>MemoryLens - Your personal memory journal powered by smart glasses</p>
         </div>
       </div>
     );
