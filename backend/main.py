@@ -182,6 +182,27 @@ async def queryJournal(prompt: Annotated[str, Form()]):
 
     return {"response": response}
 
+"""
+Get all dates of a username
+Returns
+{
+  "dates": [
+    "2025-04-12",
+    "2025-04-13"
+  ]
+}
+"""
+@app.get("/api/getDates")
+async def getDates():
+    print("Get dates endpoint hit")
+
+    dates = []
+    for x in collection.find({"user_name": db_username}):
+        dates.append(x["Start_Time"].date())
+    
+    print(dates)
+
+    return {"dates": dates}
 
 
 """
