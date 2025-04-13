@@ -36,7 +36,8 @@ function App() {
           // Save journal data and navigate to journal page
           setJournalData({
             title: formattedDate,
-            text: data.response
+            text: data.response,
+            fileName: data.filepath ? data.filepath : null
           });
           navigate('/journal');
         })
@@ -78,7 +79,7 @@ function App() {
           <div className="flex-1 bg-gray-800/70 backdrop-blur-sm rounded-xl shadow-xl p-6 border border-indigo-500/20">
             <Routes>
               <Route path='/' element={<Main />}/>
-              <Route path='/journal' element={<Page title={journalData.title} text={journalData.text} />}/>
+              <Route path='/journal' element={<Page title={journalData.title} text={journalData.text} fileName={journalData.fileName}/>}/>
             </Routes>
           </div>
         </div>
