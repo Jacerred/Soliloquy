@@ -1,8 +1,11 @@
 import "../index.css";
 
 function Upload() {
-    var filePath = null;
-    function VideoPicker() {
+    let filePath = null;
+    let file;
+    let isDragOver = false;
+
+    /*function VideoPicker() {
         const handleSelect = async () => {
           filePath = await window.electronAPI.selectVideo();
           if (filePath) {
@@ -14,6 +17,120 @@ function Upload() {
         };
     
         return <button onClick={handleSelect}>Select Video</button>;
+    }*/
+    function VideoPicker() {
+        const handleSelect = async () => {
+            filePath = await window.electronAPI.selectVideo();
+            if (filePath) {
+              console.log('Selected file:', filePath);
+              // Do something with the path (like uploading or previewing)
+            } else {
+              console.log('No file selected');
+            }
+        };
+
+        // Handle file input change
+        // @ts-ignore
+        function handleFileChange(event) {
+            const selectedFile = event.target.files[0];
+            if (selectedFile) {
+            file = selectedFile;
+            }
+        }
+
+        // Handle drag over
+        // @ts-ignore
+        function handleDragOver(event) {
+            event.preventDefault();
+            isDragOver = true; // Set the flag when dragging over the dropzone
+        }
+
+        // Handle drag leave
+        // @ts-ignore
+        function handleDragLeave(event) {
+            isDragOver = false; // Reset the flag when leaving the dropzone
+        }
+
+        // @ts-ignore
+        function handleDrop(event) {
+            event.preventDefault();
+            const droppedFile = event.dataTransfer.files[0];
+            if (droppedFile) {
+            file = droppedFile;
+            }
+            isDragOver = false; // Reset the flag after dropping the file
+        }
+
+        return (
+            <div>
+                <div className="mt-10 mr-40 ml-40">
+                <div
+                    className="flex items-center justify-center w-full"
+                    onDrag={handleDragOver}
+                    onDragLeave={handleDragLeave}
+                    onDrop={handleDrop}
+                >
+                    <label
+                    htmlFor="dropzone-file"
+                    className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer
+                    {isDragOver ? 'bg-gray-800' : 'bg-gray-50 dark:bg-gray-700'} 
+                    dark:hover:bg-gray-800 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500"
+                    >
+                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                        <svg
+                        className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 20 16"
+                        >
+                        <path
+                            stroke="currentColor"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+                        />
+                        </svg>
+                        <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                        <span className="font-semibold">Click to upload</span> or drag and drop
+                        </p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">PDF</p>
+                    </div>
+                    {/*<input
+                        id="dropzone-file"
+                        type="file"
+                        className="hidden"
+                        accept="application/pdf"
+                        onChange={handleFileChange}
+                    />*/}
+                    <button
+                        id="dropzone-file"
+                        type="button"
+                        className="hidden"
+                        onClick={handleSelect}
+                    />
+                    </label>
+                </div>
+                </div>
+
+                <div className="flex justify-center mt-10">
+                    <button
+                        type="submit"
+                        className="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 {file ==
+                        null
+                        ? 'cursor-not-allowed'
+                        : ''}"
+                    >
+                        <span
+                        className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0"
+                        >
+                        Upload
+                        </span>
+                    </button>
+                </div>
+            </div>
+        );
     }
 
     function handleSubmit(e) {
@@ -37,14 +154,7 @@ function Upload() {
         <div>
             <form method="post" onSubmit={handleSubmit}>
                 <VideoPicker />
-                <hr />
-                <label>
-                    Prompt: <input name="prompt" defaultValue=""/>
-                </label>
-                <hr />
-                <button className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow" type="submit">Submit</button>
             </form>
-            <button className="bg-blue-500">Test</button>
         </div>
     );
 }

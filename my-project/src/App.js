@@ -4,13 +4,13 @@ import './App.css';
 
 function App() {
   return (
-    <>
+    <div>
       <Router>
         <Routes>
           <Route path='/' element={< Main />}/>
         </Routes>
       </Router>
-    </>
+    </div>
     
   );
 }
