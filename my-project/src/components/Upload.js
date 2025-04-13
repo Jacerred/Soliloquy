@@ -24,19 +24,7 @@ function Upload() {
         };
     }, [file]);
 
-    /*function VideoPicker() {
-        const handleSelect = async () => {
-          filePath = await window.electronAPI.selectVideo();
-          if (filePath) {
-            console.log('Selected file:', filePath);
-            // Do something with the path (like uploading or previewing)
-          } else {
-            console.log('No file selected');
-          }
-        };
-    
-        return <button onClick={handleSelect}>Select Video</button>;
-    }*/
+
     function VideoPicker() {
         const handleSelect = async () => {
             const selectedPath = await window.electronAPI.selectVideo();
@@ -168,10 +156,10 @@ function Upload() {
         //console.log(formJson);
 
         // You can pass formData as a fetch body directly:
-        fetch('/api/processVideo', { method: form.method, body: formData });
+        fetch('http://127.0.0.1:8000/api/processVideo', { method: form.method, body: formData });
     }
     return (
-        <div>
+        <div className="flex justify-center items-center h-screen">
             <form method="post" onSubmit={handleSubmit}>
                 <VideoPicker />
             </form>
