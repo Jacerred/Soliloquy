@@ -1,4 +1,5 @@
 fastapi[standard]
 pymongo[srv]
 chromadb
-moviepy
+moviepy==1.0.3
+google-genai
