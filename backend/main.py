@@ -55,7 +55,7 @@ processVideo(json params)
 """
 
 @app.post("/api/processVideo")
-def processVideo(filename: Annotated[str, Form()], prompt: Annotated[str, Form()]):
+def processVideo(filename: Annotated[str, Form()]):
     print("Process video endpoint hit")
 
 
@@ -131,7 +131,7 @@ Params -  {query: “Where did i lose my phone???”}
 Returns {"response": “You lost your phone …”}
 """
 @app.post("/api/queryVideo")
-async def queryVideo(query_string: str):
+async def queryVideo(query_string: Annotated[str, Form()]):
     print("Query video endpoint hit")
 
     # get log_content from mongoDB
@@ -145,7 +145,7 @@ Query whole journal flow:
 - Call whole journal query func
 """
 @app.post("/api/queryJournal")
-async def queryJournal(query_string: str):
+async def queryJournal(query_string: Annotated[str, Form()]):
     print("Query journal endpoint hit")
 
     # call whole journal query func
