@@ -1,14 +1,33 @@
 from fastapi import FastAPI
-from typing import List
 import os
 import pathlib
-from typing import List
+from typing import List, Annotated
 from pymongo import MongoClient
 from datetime import datetime
 from datetime import timedelta
 from ChromaUtils import vectorize, query_vector
 from GeminiUtils import process_video, query, overall_summary, query_with_db
 from moviepy.editor import VideoFileClip
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+from fastapi import FastAPI, Form
+
+
+app = FastAPI()
+# I hate CORS
+origins = [
+    "http://localhost",
+    "http://127.0.0.1:3000",
+    "http://localhost:3000"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],    
+)
 
 # MongoDB Credentials ----------------------------------------------------------
 cluster = MongoClient("mongodb+srv://jasonxwanggg9:RJozaS4Ahx91CbYd@cluster0.jcbj8gl.mongodb.net/?retryWrites=true&w=majority")
@@ -21,8 +40,6 @@ db_username = "TestUser"
 base_dir = pathlib.Path(__file__).parent.resolve()
 chunk_base_dir = f"{base_dir}\\video_chunks"
 
-
-app = FastAPI()
 
 """
 Requests: - no auth
@@ -38,8 +55,9 @@ processVideo(json params)
 """
 
 @app.post("/api/processVideo")
-def processVideo(filename: str, prompt: str):
+def processVideo(filename: Annotated[str, Form()], prompt: Annotated[str, Form()]):
     print("Process video endpoint hit")
+
 
     # get start and end time of video from metadata
     start_time = datetime.fromtimestamp(os.path.getctime(filename))
@@ -47,7 +65,7 @@ def processVideo(filename: str, prompt: str):
     end_time = start_time + timedelta(seconds=clip.duration)
 
     # generate log.txt file and read in log_content
-    #process_video(filename, 90)
+    process_video(filename, 90)
     log_content = ""
     with open("log.txt", "r") as file:
         log_content = file.read()
@@ -88,6 +106,9 @@ def processVideo(filename: str, prompt: str):
     log_summary = overall_summary(log_content)
 
     uploadMongo(log_summary, log_content, start_time, end_time)
+
+    # delete log.txt file
+    os.remove(f"{base_dir}\\log.txt")
 
     return {"success": 1}
 
