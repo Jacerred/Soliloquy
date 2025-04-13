@@ -30,8 +30,12 @@ function QueryVideo() {
       .then((response) => response.json())
       .then((data) => {
         console.log("Server response:", data);
-        // Format the result as a pretty JSON string.
-        setResult(JSON.stringify(data, null, 2));
+        // Only display the string under the "response" key.
+        if (data && data.response) {
+          setResult(data.response);
+        } else {
+          setResult("No response found.");
+        }
       })
       .catch((error) => {
         console.error("Error submitting prompt:", error);
