@@ -13,7 +13,7 @@ function Upload() {
           }
         };
     
-        return <button onClick={handleSelect}>Select Video</button>;
+        return <button type="button" onClick={handleSelect}>Select Video</button>;
     }
 
     function handleSubmit(e) {
@@ -31,10 +31,10 @@ function Upload() {
         //console.log(formJson);
 
         // You can pass formData as a fetch body directly:
-        fetch('/api/processVideo', { method: form.method, body: formData });
+        fetch('http://127.0.0.1:8000/api/processVideo', { method: form.method, body: formData });
     }
     return (
-        <div>
+        <div className="flex justify-center items-center h-screen">
             <form method="post" onSubmit={handleSubmit}>
                 <VideoPicker />
                 <hr />
